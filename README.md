@@ -1,11 +1,11 @@
 ## Hand tracking
-Fork of https://github.com/metalwhale/hand_tracking
+Don't use this code, it is not ready for anything
 
 ### Installation
 ```
 $ git clone https://github.com/cagbal/hand_tracking
 $ cd hand_tracking
-$ pip install opencv-python tensorflow==2.1.0
+$ pip install opencv-python tensorflow==2.1.0 shapely
 ```
 
 ### Usage
