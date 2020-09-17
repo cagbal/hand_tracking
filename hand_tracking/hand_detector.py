@@ -143,7 +143,7 @@ class HandDetector():
         probabilities = probabilities[detecion_mask]
 
         if candidate_detect.shape[0] == 0:
-            print("No hands found")
+             #print("No hands found")
             return None, None, None
 
         # Pick the best bounding box with non maximum suppression
