@@ -25,7 +25,8 @@ class HandTracker():
     """
 
     def __init__(self, palm_model, joint_model, anchors_path,
-                box_enlarge=1.5, box_shift=0.2):
+                box_enlarge=1.5, box_shift=0.2,
+                hand_probability_threshold=0.5):
         self.box_shift = box_shift
         self.box_enlarge = box_enlarge
 
@@ -66,6 +67,8 @@ class HandTracker():
                         [256, 256, 1],
                         [  0, 256, 1],
                     ])
+
+        self._hand_probability_threshold = hand_probability_threshold
 
     def _get_triangle(self, kp0, kp2, dist=1):
         """get a triangle used to calculate Affine transformation matrix"""
@@ -134,7 +137,7 @@ class HandTracker():
 
         # finding the best prediction
         probabilities = self._sigm(out_clf)
-        detecion_mask = probabilities > 0.5
+        detecion_mask = probabilities > self._hand_probability_threshold
         candidate_detect = out_reg[detecion_mask]
         candidate_anchors = self.anchors[detecion_mask]
         probabilities = probabilities[detecion_mask]
@@ -191,7 +194,7 @@ class HandTracker():
         return img_pad, img_norm, pad
 
 
-    def __call__(self, img):
+    def __call__(self, img, only_palm=False):
         img_pad, img_norm, pad = self.preprocess_img(img)
 
         source, keypoints, _ = self.detect_hand(img_norm)
@@ -210,8 +213,6 @@ class HandTracker():
             self._im_normalize(img_pad), Mtr, (256,256)
         )
 
-        joints = self.predict_joints(img_landmark)
-
         # adding the [0,0,1] row to make the matrix square
         Mtr = self._pad1(Mtr.T).T
         Mtr[2,:2] = 0
@@ -219,9 +220,16 @@ class HandTracker():
         Minv = np.linalg.inv(Mtr)
 
         # projecting keypoints back into original image coordinate space
-        kp_orig = (self._pad1(joints) @ Minv.T)[:,:2]
-        box_orig = (self._target_box @ Minv.T)[:,:2]
-        kp_orig -= pad[::-1]
-        box_orig -= pad[::-1]
+        
+        if only_palm == False:
+            joints = self.predict_joints(img_landmark)
+            kp_orig = (self._pad1(joints) @ Minv.T)[:,:2]
+            kp_orig -= pad[::-1]
 
-        return kp_orig, box_orig
+        box_orig = (self._target_box @ Minv.T)[:,:2]
+        box_orig -= pad[::-1]
+        
+        if only_palm:
+            return box_orig
+        else:
+            return kp_orig, box_orig
