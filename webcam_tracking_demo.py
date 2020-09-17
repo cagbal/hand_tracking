@@ -32,7 +32,8 @@ detector = HandDetector(
 )
 
 tracker = HandTracker(
-    memory_capacity = 10
+    memory_capacity = 10,
+    iou_threshold = 20
 )
 
 while hasFrame:
@@ -40,7 +41,6 @@ while hasFrame:
     points, bbox = detector(image, only_palm=False)
 
     tracker(bbox)
-
 
     if points is not None:
         for point in bbox:
