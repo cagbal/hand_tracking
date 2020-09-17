@@ -1,18 +1,24 @@
 ## Hand tracking
+Fork of https://github.com/metalwhale/hand_tracking
 
-### 1. ファイル説明
-- `palm_detection_without_custom_op.tflite`（手のひら検出）モデルファイル：[*mediapipe-models*]レポジトリよりダウンロードしました。
-- `hand_landmark.tflite`（ランドマーク検出）モデルファイル：[*mediapipe*]レポジトリよりダウンロードしました。
-- `anchors.csv`ファイルと`hand_tracker.py`ファイル：[*hand_tracking*]レポジトリよりダウンロードしました。
+### Installation
+```
+$ git clone https://github.com/cagbal/hand_tracking
+$ pip install opencv-python tensorflow
+$ python run.py
+```
 
-### 2. 実施方法
+### Usage
 ```
 $ pip install opencv-python tensorflow
 $ python run.py
 ```
 
-### 3. 結果
-![Result](/output.gif?raw=true "Result")
+### Credits
+- All the logic: https://github.com/metalwhale/hand_tracking
+- `palm_detection_without_custom_op.tflite`：[*mediapipe-models*]
+- `hand_landmark.tflite`：[*mediapipe*]
+- `anchors.csv`and`hand_tracker.py`：[*hand_tracking*]
 
 [*mediapipe-models*]: https://github.com/junhwanjang/mediapipe-models/tree/master/palm_detection/mediapipe_models
 [*mediapipe*]: https://github.com/google/mediapipe/tree/master/mediapipe/models
