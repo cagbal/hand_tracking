@@ -4,14 +4,13 @@ Fork of https://github.com/metalwhale/hand_tracking
 ### Installation
 ```
 $ git clone https://github.com/cagbal/hand_tracking
-$ pip install opencv-python tensorflow
-$ python run.py
+$ cd hand_tracking
+$ pip install opencv-python tensorflow==2.1.0
 ```
 
 ### Usage
 ```
-$ pip install opencv-python tensorflow
-$ python run.py
+$ python webcam_demo.py
 ```
 
 ### Credits
