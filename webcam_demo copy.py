@@ -1,4 +1,5 @@
 import cv2
+
 from hand_tracking.hand_tracker import HandDetector
 
 WINDOW = "Hand Tracking"
