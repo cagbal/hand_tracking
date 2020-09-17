@@ -9,9 +9,10 @@ ANCHORS_PATH = "models/anchors.csv"
 POINT_COLOR = (0, 255, 0)
 CONNECTION_COLOR = (255, 0, 0)
 THICKNESS = 2
+BBOX_COLOR = (255, 255, 0)
 
 cv2.namedWindow(WINDOW)
-capture = cv2.VideoCapture(0)
+capture = cv2.VideoCapture(2)
 
 if capture.isOpened():
     hasFrame, frame = capture.read()
@@ -44,12 +45,13 @@ detector = HandTracker(
     LANDMARK_MODEL_PATH,
     ANCHORS_PATH,
     box_shift=0.2,
-    box_enlarge=1.3
+    box_enlarge=1.0,
+    hand_probability_threshold=0.8
 )
 
 while hasFrame:
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    points, _ = detector(image)
+    points, bbox = detector(image, only_palm=False)
     if points is not None:
         for point in points:
             x, y = point
@@ -58,6 +60,9 @@ while hasFrame:
             x0, y0 = points[connection[0]]
             x1, y1 = points[connection[1]]
             cv2.line(frame, (int(x0), int(y0)), (int(x1), int(y1)), CONNECTION_COLOR, THICKNESS)
+        for point in bbox:
+            x, y = point
+            cv2.circle(frame, (int(x), int(y)), THICKNESS * 2, BBOX_COLOR, THICKNESS)
     cv2.imshow(WINDOW, frame)
     hasFrame, frame = capture.read()
     key = cv2.waitKey(1)
