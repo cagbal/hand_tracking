@@ -1,6 +1,7 @@
 import cv2
 
-from hand_tracking.hand_tracker import HandDetector
+from hand_tracking.hand_detector import HandDetector
+from hand_tracking.hand_tracker import HandTracker
 
 WINDOW = "Hand Tracking"
 PALM_MODEL_PATH = "models/palm_detection_without_custom_op.tflite"
@@ -30,9 +31,17 @@ detector = HandDetector(
     hand_probability_threshold=0.8
 )
 
+tracker = HandTracker(
+    memory_capacity = 10
+)
+
 while hasFrame:
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     points, bbox = detector(image, only_palm=False)
+
+    tracker(bbox)
+
+
     if points is not None:
         for point in bbox:
             x, y = point

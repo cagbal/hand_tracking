@@ -1,6 +1,6 @@
 import cv2
 
-from hand_tracking.hand_tracker import HandDetector
+from hand_tracking.hand_detector import HandDetector
 
 WINDOW = "Hand Tracking"
 PALM_MODEL_PATH = "models/palm_detection_without_custom_op.tflite"
