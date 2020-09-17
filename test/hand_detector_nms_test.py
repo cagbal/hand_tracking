@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from src.hand_tracker import HandTracker
+from hand_tracking.hand_tracker import HandDetector
 
 ESCAPE_KEY_CODE = 27
 
@@ -27,7 +27,7 @@ def main():
         hasFrame = False
 
 
-    detector = HandTracker(
+    detector = HandDetector(
         PALM_MODEL_PATH,
         LANDMARK_MODEL_PATH,
         ANCHORS_PATH,

@@ -1,5 +1,5 @@
 import cv2
-from hand_tracking.hand_tracker import HandTracker
+from hand_tracking.hand_tracker import HandDetector
 
 WINDOW = "Hand Tracking"
 PALM_MODEL_PATH = "models/palm_detection_without_custom_op.tflite"
@@ -40,7 +40,7 @@ connections = [
     (0, 5), (5, 9), (9, 13), (13, 17), (0, 17)
 ]
 
-detector = HandTracker(
+detector = HandDetector(
     PALM_MODEL_PATH,
     LANDMARK_MODEL_PATH,
     ANCHORS_PATH,

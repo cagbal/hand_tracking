@@ -1,7 +1,7 @@
 from unittest import TestCase
 import numpy as np
 
-from src.non_maximum_suppression import non_max_suppression_fast
+from hand_tracking.non_maximum_suppression import non_max_suppression_fast
 
 
 class Test(TestCase):

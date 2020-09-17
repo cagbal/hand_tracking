@@ -6,7 +6,7 @@ import tensorflow as tf
 from hand_tracking.non_maximum_suppression import non_max_suppression_fast
 
 
-class HandTracker():
+class HandDetector():
     r"""
     Class to use Google's Mediapipe HandTracking pipeline from Python.
     So far only detection of a single hand is supported.
@@ -19,7 +19,7 @@ class HandTracker():
     Ourput:
         (21,2) array of hand joints.
     Examples::
-        >>> det = HandTracker(path1, path2, path3)
+        >>> det = HandDetector(path1, path2, path3)
         >>> input_img = np.random.randint(0,255, 256*256*3).reshape(256,256,3)
         >>> keypoints, bbox = det(input_img)
     """
