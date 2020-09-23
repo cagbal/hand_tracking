@@ -33,7 +33,7 @@ detector = HandDetector(
 
 tracker = HandTracker(
     memory_capacity = 10,
-    iou_threshold = 20
+    iou_threshold = 0.8
 )
 
 while hasFrame:
