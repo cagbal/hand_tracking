@@ -3,6 +3,8 @@ import cv2
 import numpy as np
 from shapely.geometry import Polygon
 
+from hand_tracking.utils import count_None
+
 import math
 
 class HandTracker():
@@ -28,19 +30,24 @@ class HandTracker():
 
         self._path = []
 
-    def push_memory(self, bbox: tuple):
+    def push_memory(self, bbox: np.array):
         self._memory.append(bbox)
 
         if len(self._memory) > self._memory_capacity:
             self._memory.pop(0)
 
     def track(self):
-        if self._memory.count(None) == self._memory_capacity:
+
+        none_occurences = count_None(self._memory)
+
+        if none_occurences == self._memory_capacity:
             path_and_id = self._path, self._current_id
             self._current_id +=1
             self._memory = []
             self._path = []
             return path_and_id
+
+        
         
  
     @staticmethod
@@ -69,6 +76,7 @@ class HandTracker():
         return iou
 
     def filter(self):
+        # means there is no valid detection
         if self._memory is None or self._memory[-1] is None:
             return None
         
@@ -89,13 +97,21 @@ class HandTracker():
         
         iou = self.calculate_iou(last_bbox, incoming_bbox)
 
-        if iou < self._iou_threshold:
-            self._memory[-1] = None
-        else:
+        print(iou)
+
+        if iou > self._iou_threshold:
             self._path.append(mu_incoming)
+            #self._memory[-1] = None
+            print("hey")
+        else:
+            self._memory[-1] = None
+            #self._path.append(mu_incoming)
+            print("hey2")
 
     def __call__(self, bbox: list):
         self.push_memory(bbox)
         self.filter()
-        print(self.track())
+        self.track()
+        print(self._path)
+        
         
