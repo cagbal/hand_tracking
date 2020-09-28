@@ -46,6 +46,8 @@ class HandTracker():
             self._memory = []
             self._path = []
             return path_and_id
+        else:
+            return None
 
         
         
@@ -102,16 +104,16 @@ class HandTracker():
         if iou > self._iou_threshold:
             self._path.append(mu_incoming)
             #self._memory[-1] = None
-            print("hey")
         else:
             self._memory[-1] = None
             #self._path.append(mu_incoming)
-            print("hey2")
 
     def __call__(self, bbox: list):
         self.push_memory(bbox)
         self.filter()
-        self.track()
-        print(self._path)
+        path_and_id = self.track()
+
+        return path_and_id
+        
         
         
