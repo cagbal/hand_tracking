@@ -3,6 +3,10 @@ import cv2
 from hand_tracking.hand_detector import HandDetector
 from hand_tracking.hand_tracker import HandTracker
 
+from hand_tracking.utils import KafkaClient
+
+import time
+
 WINDOW = "Hand Tracking"
 PALM_MODEL_PATH = "models/palm_detection_without_custom_op.tflite"
 LANDMARK_MODEL_PATH = "models/hand_landmark.tflite"
@@ -20,6 +24,10 @@ if capture.isOpened():
     hasFrame, frame = capture.read()
 else:
     hasFrame = False
+
+TOPIC_NAME = "hand_tracking"
+
+kafka = KafkaClient()
 
 
 detector = HandDetector(
@@ -40,7 +48,14 @@ while hasFrame:
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     points, bbox = detector(image, only_palm=False)
 
-    tracker(bbox)
+    path_and_id = tracker(bbox)
+
+  
+    if path_and_id:
+        if path_and_id[0]:
+            print(path_and_id)
+            kafka.publish(TOPIC_NAME, {'timestamp': time.time(), 'id':path_and_id[1],
+            'path': path_and_id[0]})
 
     if points is not None:
         for point in bbox:
