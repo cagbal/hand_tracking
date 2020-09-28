@@ -5,7 +5,7 @@ Don't use this code, it is not ready for anything
 ```
 $ git clone https://github.com/cagbal/hand_tracking
 $ cd hand_tracking
-$ pip install opencv-python tensorflow==2.1.0 shapely
+$ pip install opencv-python tensorflow==2.1.0 shapely kafka-python
 ```
 
 ### Usage
