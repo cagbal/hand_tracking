@@ -2,6 +2,8 @@ import cv2
 
 from hand_tracking.hand_detector import HandDetector
 from hand_tracking.hand_tracker import HandTracker
+from fusion.fusion import Fusion
+from hand_tracking.utils import create_json_message
 
 from hand_tracking.utils import KafkaClient
 
@@ -29,6 +31,7 @@ TOPIC_NAME = "hand_tracking"
 
 kafka = KafkaClient()
 
+fusion = Fusion()
 
 detector = HandDetector(
     PALM_MODEL_PATH,
@@ -53,9 +56,42 @@ while hasFrame:
   
     if path_and_id:
         if path_and_id[0]:
-            print(path_and_id)
-            kafka.publish(TOPIC_NAME, {'timestamp': time.time(), 'id':path_and_id[1],
-            'path': path_and_id[0]})
+            
+            object_map =  \
+                {
+                "left": 
+                    {
+                        "object_type": "ültje",
+                        "object_id" : "111111"
+                    },
+                "right": 
+                    {
+                        "object_type": "corny",
+                        "object_id" : "000000"
+                    }
+                }
+            print(type(object_map))
+
+            fusion.update_observations(path_and_id)
+
+            event_type, position, probabilty, object_id, object_type =\
+                fusion.fuse(
+                    object_map,
+                    image.shape[0],
+                    image.shape[1]
+                )
+
+            message = create_json_message(      
+                event_type, 
+                position,
+                probabilty,
+                object_id,
+                object_type
+                )
+
+            print(message)
+            
+            kafka.publish(TOPIC_NAME, message)
 
     if points is not None:
         for point in bbox:
