@@ -3,6 +3,9 @@ from collections.abc import Iterable
 from json import dumps
 from kafka import KafkaProducer
 
+import json
+from datetime import datetime
+
 
 def count_None(iterable):
     assert isinstance(iterable, Iterable), "Input must be an iterable"
@@ -17,6 +20,55 @@ def count_None(iterable):
 
 def convert_path_id_2_json(path_and_id):
     assert isinstance(iterable, Iterable), "Input must be an iterable"
+
+def create_json_message( 
+      event_type, 
+      object_position,
+      probability,
+      object_id,
+      object_type
+      ):
+    """
+    Sample Message format
+    {
+    "timestamp": 1600953683.2281373,
+    "event_type": "object-out",
+    "object_info": {
+        "position": "left",
+        "probability": 0.7006784439086914,
+        "object_id": "Not valid",
+        "object_type": "peanuts"
+    }
+    }
+    """
+
+    now = datetime.now()
+
+    timestamp = datetime.timestamp(now)
+
+    message = {
+        "timestamp" : timestamp,
+        "event_type": event_type,
+        "object_info": 
+        {
+            "position": object_position,
+            "probability": probability,
+            "object_id": object_id,
+            "object_type": object_type
+        }
+    }
+    
+    # write it to a file
+    save_json_message(message)
+
+    return message
+
+def save_json_message(message):
+    
+    with open("data/"+str(message["timestamp"])+'.json', 'w', encoding='utf-8') as f:
+        json.dump(message, f, ensure_ascii=False, indent=4)
+
+    return 
 
 
 class KafkaClient(object):
