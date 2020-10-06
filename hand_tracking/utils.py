@@ -64,6 +64,7 @@ def create_json_message(
     return message
 
 def save_json_message(message):
+    assert isinstance(message, dict), "Message must be a dict"
     
     with open("data/"+str(message["timestamp"])+'.json', 'w', encoding='utf-8') as f:
         json.dump(message, f, ensure_ascii=False, indent=4)
