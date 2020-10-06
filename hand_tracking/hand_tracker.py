@@ -1,11 +1,15 @@
 import csv
+import math
+
 import cv2
 import numpy as np
 from shapely.geometry import Polygon
 
+from filterpy.kalman import KalmanFilter
+
 from hand_tracking.utils import count_None
 
-import math
+
 
 class HandTracker():
     """
@@ -29,6 +33,10 @@ class HandTracker():
         self._current_id = 0
 
         self._path = []
+
+        self._kf = KalmanFilter(dim_x=8, dim_z=1)
+
+        self._kf.x = np.array([2., 0.])
 
     def push_memory(self, bbox: np.array):
         self._memory.append(bbox)
