@@ -27,7 +27,7 @@ if capture.isOpened():
 else:
     hasFrame = False
 
-TOPIC_NAME = "hand_tracking"
+TOPIC_NAME = "pa4.event.inbound"
 
 kafka = KafkaClient()
 
