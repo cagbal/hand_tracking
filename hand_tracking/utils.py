@@ -82,6 +82,6 @@ class KafkaClient(object):
         assert isinstance(topic_name, str), "Topic name must be a string"
         assert isinstance(data, dict), "Data must be a dict"
 
-        self.producer.send('numtest', value=data)
+        self.producer.send(topic_name, value=data)
 
 
